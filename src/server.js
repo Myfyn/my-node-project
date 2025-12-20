@@ -1,10 +1,12 @@
-import express from 'express';
-import {serverLogger} from './middleware/middleware.js';
-import router from './routes/test.routes.js';
-import movieRoute from './routes/movie.routes.js';
+import express from "express";
+import { serverLogger } from "./middleware/middleware.js";
+import router from "./routes/test.routes.js";
+import movieRoute from "./routes/movie.routes.js";
+import cors from "cors";
 
 const app = express();
 
+app.use(cors());
 app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "http://localhost:3001");
   res.setHeader("Access-Control-Allow-Methods", "GET,POST,OPTIONS");
@@ -13,17 +15,16 @@ app.use((req, res, next) => {
   next();
 });
 
-
 app.use(express.json()); //middleware
 app.use(serverLogger);
 
-app.get('/', (req, res) => {
-    res.send("Hello world");
+app.get("/", (req, res) => {
+  res.send("Hello world");
 });
 
-app.use("/", router)
-app.use("/", movieRoute)
+app.use("/", router);
+app.use("/", movieRoute);
 
 app.listen(3000, () => {
-    console.log("Server run on http://localhost:3000");
+  console.log("Server run on http://localhost:3000");
 });
